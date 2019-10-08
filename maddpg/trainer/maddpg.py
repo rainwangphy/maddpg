@@ -17,6 +17,7 @@ def discount_with_dones(rewards, dones, gamma):
         discounted.append(r)
     return discounted[::-1]
 
+
 def make_update_exp(vals, target_vals):
     polyak = 1.0 - 1e-2
     expression = []
@@ -24,6 +25,7 @@ def make_update_exp(vals, target_vals):
         expression.append(var_target.assign(polyak * var_target + (1.0-polyak) * var))
     expression = tf.group(*expression)
     return U.function([], [], updates=[expression])
+
 
 def p_train(make_obs_ph_n, act_space_n, p_index, p_func, q_func, optimizer, grad_norm_clipping=None, local_q_func=False, num_units=64, scope="trainer", reuse=None):
     with tf.variable_scope(scope, reuse=reuse):
@@ -71,6 +73,7 @@ def p_train(make_obs_ph_n, act_space_n, p_index, p_func, q_func, optimizer, grad
         target_act = U.function(inputs=[obs_ph_n[p_index]], outputs=target_act_sample)
 
         return act, train, update_target_p, {'p_values': p_values, 'target_act': target_act}
+
 
 def q_train(make_obs_ph_n, act_space_n, q_index, q_func, optimizer, grad_norm_clipping=None, local_q_func=False, scope="trainer", reuse=None, num_units=64):
     with tf.variable_scope(scope, reuse=reuse):
