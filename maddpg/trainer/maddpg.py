@@ -114,6 +114,7 @@ def q_train(make_obs_ph_n, act_space_n, q_index, q_func, optimizer, grad_norm_cl
 
 
 class MADDPGAgentTrainer(AgentTrainer):
+
     def __init__(self, name, model, obs_shape_n, act_space_n, agent_index, args, local_q_func=False):
         self.name = name
         self.n = len(obs_shape_n)
@@ -163,7 +164,7 @@ class MADDPGAgentTrainer(AgentTrainer):
         self.replay_sample_index = None
 
     def update(self, agents, t):
-        if len(self.replay_buffer) < self.max_replay_buffer_len: # replay buffer is not large enough
+        if len(self.replay_buffer) < self.max_replay_buffer_len:  # replay buffer is not large enough
             return
         if not t % 100 == 0:  # only update every 100 steps
             return
