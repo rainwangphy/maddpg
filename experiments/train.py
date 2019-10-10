@@ -114,26 +114,26 @@ def train(arglist):
         while True:
             # get action
             action_n = [agent.action(obs) for agent, obs in zip(trainers, obs_n)]
-            # environment step
+            # environment step, move one step in the environment
             new_obs_n, rew_n, done_n, info_n = env.step(action_n)
             episode_step += 1
             done = all(done_n)
             terminal = (episode_step >= arglist.max_episode_len)
-            # collect experience
+            # collect experience, store in the replay-buffer
             for i, agent in enumerate(trainers):
                 agent.experience(obs_n[i], action_n[i], rew_n[i], new_obs_n[i], done_n[i], terminal)
             obs_n = new_obs_n
 
             for i, rew in enumerate(rew_n):
-                episode_rewards[-1] += rew
+                episode_rewards[-1] += rew  # read the last element of the variable
                 agent_rewards[i][-1] += rew
 
-            if done or terminal:
-                obs_n = env.reset()
+            if done or terminal:  # if the game is done or reach the terminal of the episode
+                obs_n = env.reset()  # reset the environment
                 episode_step = 0
                 episode_rewards.append(0)
                 for a in agent_rewards:
-                    a.append(0)
+                    a.append(0)  # augment the variable with 1 for each episode
                 agent_info.append([[]])
 
             # increment global step counter
@@ -157,6 +157,7 @@ def train(arglist):
                 env.render()
                 continue
 
+            # train the actors
             # update all trainers, if not in display or benchmark mode
             loss = None
             for agent in trainers:
