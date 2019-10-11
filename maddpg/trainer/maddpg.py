@@ -88,7 +88,7 @@ def q_train(make_obs_ph_n, act_space_n, q_index, q_func, optimizer, grad_norm_cl
         q_input = tf.concat(obs_ph_n + act_ph_n, 1)
         if local_q_func:  # local q function is defaultly to false
             q_input = tf.concat([obs_ph_n[q_index], act_ph_n[q_index]], 1)
-        q = q_func(q_input, 1, scope="q_func", num_units=num_units)[:,0]
+        q = q_func(q_input, 1, scope="q_func", num_units=num_units)[:, 0]
         q_func_vars = U.scope_vars(U.absolute_scope_name("q_func"))
 
         q_loss = tf.reduce_mean(tf.square(q - target_ph))
